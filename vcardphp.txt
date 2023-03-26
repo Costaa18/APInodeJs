@@ -1,0 +1,30 @@
+http://exemplo.com/adicionar-contato.php?nome=John+Doe&telefone=123456789&email=john.doe%40exemplo.com
+
+Nesse exemplo, o link contém os dados do contato, como o nome, o telefone e o email, separados por & e codificados em URL. Ao escanear o QR Code, o aplicativo de leitura de QR Code abrirá o link, que redirecionará para a página PHP com os dados.
+
+Na página PHP, você pode usar as variáveis GET para extrair os dados do link e criar um contato telefônico usando uma biblioteca como a vCard PHP. O código pode ficar assim:
+
+php
+Copy code
+<?php
+
+require_once 'vCard.php';
+
+// Extrai os dados da variáveis GET
+$nome = $_GET['nome'];
+$telefone = $_GET['telefone'];
+$email = $_GET['email'];
+
+// Cria um objeto vCard com os dados
+$vCard = new vCard();
+$vCard->setName($nome);
+$vCard->addPhoneNumber($telefone);
+$vCard->addEmail($email);
+
+// Define o cabeçalho de resposta para indicar que é um arquivo vCard
+header('Content-Type: text/x-vcard');
+header('Content-Disposition: attachment; filename="' . $nome . '.vcf"');
+
+// Exibe o conteúdo do vCard
+echo $vCard->getOutput();
+Nesse exemplo, o código cria um objeto vCard com os dados recebidos, define o cabeçalho de resposta para indicar que é um arquivo vCard e exibe o conteúdo do vCard usando o método getOutput() da biblioteca vCard PHP. O arquivo resultante pode ser baixado e importado para a lista de contatos do telefone.
